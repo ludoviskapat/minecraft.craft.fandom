@@ -1,85 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Minecraft Infinite Craft</title>
-
+<title>Infinite Craft Optimisé</title>
 <style>
-
-body{
-    background:#2b2b2b;
-    color:white;
-    font-family:Arial;
-    display:flex;
-    justify-content:center;
-}
-
-#game{
-    display:flex;
-    gap:60px;
-    margin-top:40px;
-}
-
-#items{
-    width:200px;
-}
-
-.item{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin:6px;
-    cursor:pointer;
-}
-
-.item img{
-    width:32px;
-}
-
-#crafting{
-    display:grid;
-    grid-template-columns:repeat(3,64px);
-    grid-gap:6px;
-}
-
-.slot{
-    width:64px;
-    height:64px;
-    background:#3a3a3a;
-    border:2px solid #777;
-}
-
-.slot img{
-    width:100%;
-}
-
-#result{
-    width:64px;
-    height:64px;
-    border:2px solid white;
-}
-
+body { margin: 0; overflow: hidden; background: #87CEEB; }
+canvas { display: block; }
 </style>
 </head>
-
 <body>
-
-<div id="game">
-
-<div id="items"></div>
-
-<div>
-<div id="crafting"></div>
-</div>
-
-<div>
-<h3>=</h3>
-<div id="result"></div>
-</div>
-
-</div>
-
-<script src="script.js"></script>
-
+<canvas id="gameCanvas"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.min.js"></script>
+<script src="main.js"></script>
 </body>
 </html>
