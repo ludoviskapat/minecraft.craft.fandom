@@ -1,104 +1,201 @@
-import { useState } from "react";
-import { Search, Book } from "lucide-react";
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Minecraft Craft Guide</title>
 
-const recipes = [
-  {
-    name: "Diamond Pickaxe",
-    rarity: 5,
-    grid: [
-      "diamond","diamond","diamond",
-      "","stick","",
-      "","stick",""
-    ]
-  },
-  {
-    name: "Crafting Table",
-    rarity: 1,
-    grid: [
-      "planks","planks","",
-      "planks","planks","",
-      "","",""
-    ]
-  },
-  {
-    name: "Golden Apple",
-    rarity: 4,
-    grid: [
-      "gold","gold","gold",
-      "gold","apple","gold",
-      "gold","gold","gold"
-    ]
-  }
-];
+<style>
 
-function CraftingGrid({ grid }) {
-  return (
-    <div className="grid grid-cols-3 gap-2 bg-amber-800 p-4 rounded-2xl shadow-lg">
-      {grid.map((item, i) => (
-        <div
-          key={i}
-          className="w-16 h-16 bg-amber-200 rounded flex items-center justify-center text-xs text-center"
-        >
-          {item}
-        </div>
-      ))}
-    </div>
-  );
+body{
+font-family:Arial;
+background:#1e1e1e;
+color:white;
+margin:0;
+text-align:center;
 }
 
-export default function App() {
-  const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState(null);
-  const [catalog, setCatalog] = useState(false);
-
-  const filtered = recipes
-    .filter((r) => r.name.toLowerCase().includes(search.toLowerCase()))
-    .sort((a, b) => b.rarity - a.rarity);
-
-  return (
-    <div className="min-h-screen bg-green-100 flex flex-col items-center justify-between p-6">
-      <h1 className="text-3xl font-bold">Minecraft Craft Guide</h1>
-
-      {selected && (
-        <div className="flex flex-col items-center gap-4">
-          <h2 className="text-xl font-semibold">{selected.name}</h2>
-          <CraftingGrid grid={selected.grid} />
-        </div>
-      )}
-
-      {catalog && (
-        <div className="grid grid-cols-2 gap-3 max-w-md">
-          {filtered.map((r) => (
-            <button
-              key={r.name}
-              onClick={() => setSelected(r)}
-              className="bg-white p-3 rounded-xl shadow hover:scale-105"
-            >
-              {r.name}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <div className="fixed bottom-6 flex gap-10 bg-white p-4 rounded-2xl shadow-xl">
-        <button onClick={() => setCatalog(true)}>
-          <Book size={32} />
-        </button>
-
-        <div className="flex items-center gap-2">
-          <Search />
-          <input
-            placeholder="Search item"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border rounded px-2"
-          />
-        </div>
-
-        <button onClick={() => setCatalog(false)}>
-          Home
-        </button>
-      </div>
-    </div>
-  );
+header{
+background:#2b8a3e;
+padding:20px;
+font-size:32px;
+font-weight:bold;
 }
+
+input{
+padding:10px;
+margin:20px;
+border-radius:8px;
+border:none;
+font-size:16px;
+width:250px;
+}
+
+.catalog{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:15px;
+padding:20px;
+max-width:1000px;
+margin:auto;
+}
+
+.item{
+background:#2d2d2d;
+padding:15px;
+border-radius:12px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.item:hover{
+transform:scale(1.08);
+background:#3b3b3b;
+}
+
+.item img{
+width:40px;
+height:40px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(3,80px);
+gap:6px;
+justify-content:center;
+margin-top:20px;
+}
+
+.slot{
+width:80px;
+height:80px;
+background:#8b5a2b;
+border-radius:6px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.slot img{
+width:50px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>Minecraft Craft Guide</header>
+
+<input id="search" placeholder="Search item">
+
+<div id="catalog" class="catalog"></div>
+
+<h2 id="itemName"></h2>
+<div id="grid" class="grid"></div>
+
+<script>
+
+const items = {
+
+diamond:"https://minecraft.wiki/images/Diamond_JE3_BE3.png",
+stick:"https://minecraft.wiki/images/Stick_JE2_BE2.png",
+planks:"https://minecraft.wiki/images/Oak_Planks_JE4_BE3.png",
+gold:"https://minecraft.wiki/images/Gold_Ingot_JE4_BE2.png",
+apple:"https://minecraft.wiki/images/Apple_JE3_BE3.png",
+coal:"https://minecraft.wiki/images/Coal_JE3_BE3.png"
+
+}
+
+const recipes=[
+
+{
+name:"Diamond Pickaxe",
+rarity:5,
+grid:["diamond","diamond","diamond","","stick","","","stick",""]
+},
+
+{
+name:"Golden Apple",
+rarity:4,
+grid:["gold","gold","gold","gold","apple","gold","gold","gold","gold"]
+},
+
+{
+name:"Crafting Table",
+rarity:1,
+grid:["planks","planks","","planks","planks","","","",""]
+},
+
+{
+name:"Torch",
+rarity:1,
+grid:["coal","","","stick","","","","",""]
+}
+
+]
+
+recipes.sort((a,b)=>b.rarity-a.rarity)
+
+const catalog=document.getElementById("catalog")
+const grid=document.getElementById("grid")
+const itemName=document.getElementById("itemName")
+const search=document.getElementById("search")
+
+function showCatalog(list){
+
+catalog.innerHTML=""
+
+list.forEach(r=>{
+
+const div=document.createElement("div")
+div.className="item"
+
+div.innerHTML=`
+<img src="${items[r.grid.find(x=>x)]}">
+<div>${r.name}</div>
+`
+
+div.onclick=()=>showRecipe(r)
+
+catalog.appendChild(div)
+
+})
+
+}
+
+function showRecipe(recipe){
+
+itemName.innerText=recipe.name
+grid.innerHTML=""
+
+recipe.grid.forEach(i=>{
+
+const slot=document.createElement("div")
+slot.className="slot"
+
+if(i){
+slot.innerHTML=`<img src="${items[i]}">`
+}
+
+grid.appendChild(slot)
+
+})
+
+}
+
+search.oninput=()=>{
+
+const v=search.value.toLowerCase()
+
+const filtered=recipes.filter(r=>r.name.toLowerCase().includes(v))
+
+showCatalog(filtered)
+
+}
+
+showCatalog(recipes)
+
+</script>
+
+</body>
+</html>
