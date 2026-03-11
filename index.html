@@ -1,89 +1,62 @@
-```html
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Minecraft Craft Guide</title>
+<title>Minecraft Infinite Craft</title>
 
 <style>
 
 body{
-margin:0;
-font-family:Arial;
-background:#1b1b1b;
-color:white;
-display:flex;
+    background:#2b2b2b;
+    color:white;
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
 }
 
-.left{
-width:60%;
-padding:20px;
+#game{
+    display:flex;
+    gap:60px;
+    margin-top:40px;
 }
 
-.right{
-width:40%;
-background:#222;
-padding:20px;
-border-left:3px solid #333;
+#items{
+    width:200px;
 }
 
-header{
-font-size:30px;
-margin-bottom:20px;
+.item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:6px;
+    cursor:pointer;
 }
 
-.inventory{
-display:grid;
-grid-template-columns:repeat(6,60px);
-gap:6px;
-margin-bottom:20px;
+.item img{
+    width:32px;
 }
 
-.invslot{
-width:60px;
-height:60px;
-background:#444;
-display:flex;
-align-items:center;
-justify-content:center;
-cursor:pointer;
-border-radius:6px;
-}
-
-.invslot img{
-width:40px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(3,70px);
-gap:6px;
+#crafting{
+    display:grid;
+    grid-template-columns:repeat(3,64px);
+    grid-gap:6px;
 }
 
 .slot{
-width:70px;
-height:70px;
-background:#8b5a2b;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:6px;
-cursor:pointer;
+    width:64px;
+    height:64px;
+    background:#3a3a3a;
+    border:2px solid #777;
 }
 
 .slot img{
-width:45px;
+    width:100%;
 }
 
-.result{
-margin-top:15px;
-font-size:18px;
-}
-
-button{
-padding:10px;
-margin-top:10px;
-cursor:pointer;
+#result{
+    width:64px;
+    height:64px;
+    border:2px solid white;
 }
 
 </style>
@@ -91,147 +64,22 @@ cursor:pointer;
 
 <body>
 
-<div class="left">
+<div id="game">
 
-<header>Minecraft Craft Guide</header>
+<div id="items"></div>
 
-<p>Inventaire :</p>
-<div class="inventory" id="inventory"></div>
+<div>
+<div id="crafting"></div>
+</div>
+
+<div>
+<h3>=</h3>
+<div id="result"></div>
+</div>
 
 </div>
 
-<div class="right">
-
-<h2>Table de craft</h2>
-
-<div class="grid" id="craft"></div>
-
-<div class="result" id="result"></div>
-
-<button onclick="clearGrid()">Clear</button>
-
-</div>
-
-<script>
-
-const textures={
-diamond:"https://minecraft.wiki/images/Diamond_JE3_BE3.png",
-stick:"https://minecraft.wiki/images/Stick_JE2_BE2.png",
-planks:"https://minecraft.wiki/images/Oak_Planks_JE4_BE3.png",
-cobblestone:"https://minecraft.wiki/images/Cobblestone_JE5_BE3.png",
-iron:"https://minecraft.wiki/images/Iron_Ingot_JE3_BE2.png"
-}
-
-const recipes=[
-
-{
-name:"Diamond Pickaxe",
-pattern:[
-"diamond","diamond","diamond",
-"","stick","",
-"","stick",""
-]
-},
-
-{
-name:"Stone Pickaxe",
-pattern:[
-"cobblestone","cobblestone","cobblestone",
-"","stick","",
-"","stick",""
-]
-},
-
-{
-name:"Crafting Table",
-pattern:[
-"planks","planks","",
-"planks","planks","",
-"","",""
-]
-}
-
-]
-
-let selected=null
-let grid=["","","","","","","","",""]
-
-const inventory=document.getElementById("inventory")
-const craft=document.getElementById("craft")
-
-Object.keys(textures).forEach(item=>{
-
-const div=document.createElement("div")
-div.className="invslot"
-
-div.innerHTML=`<img src="${textures[item]}">`
-
-div.onclick=()=>selected=item
-
-inventory.appendChild(div)
-
-})
-
-for(let i=0;i<9;i++){
-
-const div=document.createElement("div")
-div.className="slot"
-
-div.onclick=()=>{
-
-if(selected){
-grid[i]=selected
-updateCraft()
-}
-
-}
-
-craft.appendChild(div)
-
-}
-
-function updateCraft(){
-
-const slots=document.querySelectorAll(".slot")
-
-slots.forEach((s,i)=>{
-
-s.innerHTML=""
-
-if(grid[i]){
-s.innerHTML=`<img src="${textures[grid[i]]}">`
-}
-
-})
-
-checkRecipe()
-
-}
-
-function checkRecipe(){
-
-for(const r of recipes){
-
-if(JSON.stringify(r.pattern)==JSON.stringify(grid)){
-document.getElementById("result").innerText="Craft: "+r.name
-return
-}
-
-}
-
-document.getElementById("result").innerText="No recipe"
-
-}
-
-function clearGrid(){
-
-grid=["","","","","","","","",""]
-updateCraft()
-
-}
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
-```
